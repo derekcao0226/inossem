@@ -1,0 +1,85 @@
+idoc {
+        newline "LF"
+        control "EDI_DC40_U"
+        group  "group1","E2MARAM008" loop true including 
+                {
+                    	segment  "E2MARAM008" including
+	                 			{
+		                    	field "MATNR" start 67 end 84 trim
+			                    field "MTART" start 141 end 144 trim
+			                    field "MBRSH" start 145 end 145 
+			                    field "MATKL" start 146 end 154
+			                    field "MEINS" start 173 end 175
+			                    field "GROES" start 244 end 275
+			                    field "BRGEW" start 315 end 328
+			                    field "NTGEW" start 329 end 342 
+			                    field "GEWEI" start 343 end 345 
+			                    field "VOLUM" start 346 end 359 
+			                    field "VOLEH" start 360 end 362			                     
+			                    field "SPART" start 391 end 392
+			                    field "EAN11" start 427 end 444 
+			                    field "NUMTP" start 445 end 446 
+			                    field "LAENG" start 447 end 460 
+			                    field "BREIT" start 461 end 474 
+			                    field "HOEHE" start 475 end 488 
+			                    field "MEABM" start 489 end 491
+			                    field "MSTAE" start 634 end 635
+			                    field "MSTAV" start 636 end 637
+			                    field "MTPOS_MARA" start 759 end 762                  
+	                    	}
+	                    	segment "Z2MARA000" loop true 
+	                    segment  "E2MAKTM001" loop true including
+				                {
+				                    field "MSGFN" start 64 end 66 trim
+				                    field "SPRAS" start 67 end 67
+				                    field "MAKTX" start 68 end 107 trim
+				                    field "SPRAS_ISO" start 108 end 109 trim
+				                }
+				                
+				              group  "group2" , "E2MARCM008" loop true including 
+				              {
+				              		segment "E2MARCM008" including
+				              		  {
+				              		    field "WERKS" start 67 end 70 trim
+				              		    field "SERNP" start 564 end 567 trim
+				              		  }
+				              		 segment "E2MARDM001" loop true  
+				              }
+				              group "group3","E2MARMM004" loop true including 
+							        {
+							            segment "E2MARMM004" 
+							            segment "E2MEANM001" loop true 
+							        }
+							        segment "E2MBEWM002" loop true 
+							        segment "E2MLGNM001" loop true 				              
+				              segment  "E2MVKEM003" loop true including
+				                {
+				                    field "VKORG" start 67 end 70 trim
+				                    field "VMSTA" start 80 end 81				                    
+				                }
+				                segment "E2MLANM" loop true  
+                    	group  "group4","E2MTXHM002" loop true including 
+								       {
+								       		  segment  "E2MTXHM002" including
+									       		  {
+									       		  		field "MSGFN" start 64 end 66  
+									       		  		field "TDOBJECT" start 67 end 76 
+									       		  		field "TDNAME" start 77 end 146 
+									       		  		field "TDID" start 147 end 150 
+									       		  		field "TDSPRAS" start 151 end 151 
+									       		  		field "TDTEXTTYPE" start 152 end 157 
+									       		  		field "SPRAS_ISO" start 158 end 159 
+									       		  }
+									       		segment  "E2MTXLM" loop true including
+									       		 {
+									       		 			field "MSGFN" start 64 end 66  
+									       		  		field "TDFORMAT" start 67 end 68 
+									       		  		field "TDLINE" start 69 end 200 
+									       		 }
+									       		 
+									       			
+								       
+								       }
+                }                        
+       
+    }
