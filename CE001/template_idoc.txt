@@ -1,0 +1,150 @@
+<@idoc newline="LF">
+<@segment name="EDI_DC40_U" length=524>    
+    <@field name="IDOCTYP" start=40 end=69>MATMAS01</@field>
+    <@field name="MESTYP" start=100 end=129>MATMAS</@field>
+    <@field name="SNDPOR" start=149 end=158>PGOCN</@field>
+    <@field name="SNDPRT" start=159 end=160>LS</@field>
+    <@field name="SNDPRN" start=163 end=172>PGOCN</@field>
+    <@field name="RCVPOR" start=264 end=273>SAPE4D</@field>
+    <@field name="RCVPRT" start=274 end=275>LS</@field>
+    <@field name="RCVPRN" start=278 end=287>E4DCLNT200</@field>
+    <@field name="REFMES" start=421 end=434>${Generate12BitsRandomNumber()}</@field>
+</@segment>
+<#list group1 as array1>
+	<@segment name="E2MARAM008" length=1028>
+    <@field name="MATNR" start=67 end=84>${array1.E2MARAM008.MATNR}</@field>    
+    <@field name="MTART" start=141 end=144>ZN01</@field>    
+    <@field name="MBRSH" start=145 end=145>I</@field> 
+    <@field name="MATKL" start=146 end=154>${array1.E2MARAM008.MATKL}</@field> 
+    <#if array1.E2MARAM008.MEINS?trim="PCS">
+     <@field name="MEINS" start=173 end=175>PCE</@field>
+    <#else> 
+      <@field name="MEINS" start=173 end=175>${array1.E2MARAM008.MEINS}</@field>
+    </#if>
+    <@field name="GROES" start=244 end=275>${array1.E2MARAM008.GROES}</@field> 
+    <@field name="BRGEW" start=315 end=328>${array1.E2MARAM008.BRGEW}</@field> 
+    <@field name="NTGEW" start=329 end=342>${array1.E2MARAM008.NTGEW}</@field> 
+    <@field name="GEWEI" start=343 end=345>${array1.E2MARAM008.GEWEI}</@field> 
+    <@field name="VOLUM" start=346 end=359>${array1.E2MARAM008.VOLUM}</@field> 
+    <@field name="VOLEH" start=360 end=362>${array1.E2MARAM008.VOLEH}</@field>
+    <@field name="SPART" start=391 end=392>${array1.E2MARAM008.SPART}</@field>
+    <@field name="EAN11" start=427 end=444>${array1.E2MARAM008.EAN11}</@field> 
+    <@field name="NUMTP" start=445 end=446>${array1.E2MARAM008.NUMTP}</@field> 
+    <@field name="LAENG" start=447 end=460>${array1.E2MARAM008.LAENG}</@field> 
+    <@field name="BREIT" start=461 end=474>${array1.E2MARAM008.BREIT}</@field> 
+    <@field name="HOEHE" start=475 end=488>${array1.E2MARAM008.HOEHE}</@field> 
+    <@field name="MEABM" start=489 end=491>${array1.E2MARAM008.MEABM}</@field> 
+    <@field name="MSTAE" start=634 end=635>Z1</@field> 
+    <@field name="MSTAV" start=636 end=637>${array1.E2MARAM008.MSTAV}</@field> 
+    <@field name="MTPOS_MARA" start=759 end=762>${array1.E2MARAM008.MTPOS_MARA}</@field>     
+  </@segment>
+	<#list array1.E2MAKTM001 as maktm>
+	  <@segment name="E2MAKTM001" length=109>
+    <@field name="MSGFN" start=64 end=66>${maktm.MSGFN}</@field>
+    <@field name="SPRAS" start=67 end=67>${maktm.SPRAS}</@field>    
+    <@field name="MAKTX" start=68 end=107>${maktm.MAKTX}</@field>    
+    <@field name="SPRAS_ISO" start=108 end=109>${maktm.SPRAS_ISO}</@field>        
+ 	</@segment> 	
+	</#list>
+	
+
+<#assign flag_1072 =0>
+<#assign flag_vkorg="">
+	<#list array1.group2 as array2>		  
+	<#if flag_1072=0||(array2.E2MARCM008.WERKS?trim!="1070"&&array2.E2MARCM008.WERKS?trim!="1072")>
+	  <@segment name="E2MARCM008" length=1056>
+		  <#list array1.E2MVKEM003 as mvkem>
+		    <#if mvkem.VKORG?trim="4317"&&(array2.E2MARCM008.WERKS?trim="1070"||array2.E2MARCM008.WERKS?trim="1072")>		    	
+		       <#assign flag_1072=1>
+		       <#assign flag_vkorg="4317">
+		       <@field name="WERKS" start=67 end=70>NL12</@field>	      		     
+		    <#elseif mvkem.VKORG?trim="4350"&&(array2.E2MARCM008.WERKS?trim="1150")>
+		       <#assign flag_vkorg="4350"> 
+		       <@field name="WERKS" start=67 end=70>NL11</@field>		       		    
+		    </#if>
+		  </#list>
+		  <#if array1.E2MARAM008.MATKL?trim="G01"||array1.E2MARAM008.MATKL?trim="G03"||array1.E2MARAM008.MATKL?trim="G04">
+		  	<@field name="EKGRP" start=90 end=92>SA1</@field>
+		  <#elseif array1.E2MARAM008.MATKL?trim!="G01"&&array1.E2MARAM008.MATKL?trim!="G03"&&array1.E2MARAM008.MATKL?trim!="G04">
+		    <@field name="EKGRP" start=90 end=92>AS1</@field>		 
+		  </#if>		  
+	    <@field name="DISMM" start=100 end=101>ND</@field>
+	    <@field name="BESKZ" start=119 end=119>F</@field>
+	    <@field name="LOSGR" start=505 end=518>1</@field>
+	    <#if array2.E2MARCM008.SERNP?trim="ZN01">
+	     <#if array2.E2MARCM008.WERKS?trim="1070"||array2.E2MARCM008.WERKS?trim="1072">
+	      <@field name="SERNP" start=564 end=567>Z002</@field>
+	     <#elseif array2.E2MARCM008.WERKS?trim="1150">
+	      <@field name="SERNP" start=564 end=567>Z001</@field>
+	     </#if>	     
+	    </#if>	    	    
+	  </@segment>
+ 	  
+	   <#list array1.E2MVKEM003 as mvkem>
+	    <#if mvkem.VKORG=flag_vkorg>
+        <@segment name = "E2MARDM001" length = 170 >            
+            <@field name="MSGFN" start=64 end=66>005</@field>
+            <#if mvkem.VKORG="4317">	
+            <@field name="LGORT" start=67 end=70>NL3S</@field>
+            <#elseif mvkem.VKORG="4350">            	
+               <@field name="LGORT" start=67 end=70>NL1S</@field>              
+            </#if>
+        </@segment>
+      </#if>
+     </#list>
+    </#if> 
+	 </#list>
+	<#assign flag_1070 =0>
+	<#-- do not need map			
+	<#list array1.group2 as array2>
+		<#if flag_1070=0||(array2.E2MARCM008.WERKS?trim!="1070"&&array2.E2MARCM008.WERKS?trim!="1072")>
+     <@segment name = "E2MBEWM002" length = 538 >
+	     <@field name="MSGFN" start=64 end=66>005</@field>	     
+	       <#if array2.E2MARCM008.WERKS?trim="1070"||array2.E2MARCM008.WERKS?trim="1072">	
+	        <@field name="BWKEY" start=67 end=70>NL12</@field>
+	       <#elseif array2.E2MARCM008.WERKS?trim="1150">
+	        <@field name="BWKEY" start=67 end=70>NL11</@field>
+	       </#if>	     
+	     <@field name="PEINH" start=107 end=111>1</@field>	     
+	      <#if array2.E2MARCM008.WERKS?trim="1070"||array2.E2MARCM008.WERKS?trim="1072">
+	       <#assign flag_1070=1>
+	       <@field name="BKLAS" start=112 end=115>Z001</@field>
+	      <#elseif array2.E2MARCM008.WERKS?trim="1150">
+	       <@field name="BKLAS" start=112 end=115>Z002</@field>
+	      </#if>	     
+	     <@field name="VMPEI" start=141 end=145>1</@field>	     
+	      <#if array2.E2MARCM008.WERKS?trim="1070"||array2.E2MARCM008.WERKS?trim="1072">
+	      <@field name="VMBKL" start=146 end=149>Z001</@field>
+	      <@field name="VJBKL" start=504 end=507>Z001</@field>
+	     <#elseif array2.E2MARCM008.WERKS?trim="1150">
+	      <@field name="VMBKL" start=146 end=149>Z002</@field>
+	      <@field name="VJBKL" start=504 end=507>Z002</@field>
+	     </#if>	     
+	     <@field name="VJPEI" start=508 end=514>1</@field>
+     </@segment>
+   </#if>
+  </#list>
+  -->
+  <#if array1.group4??>
+		<#list array1.group4 as array4>
+		  <@segment name="E2MTXHM002" length=229>
+		    <@field name="MSGFN" start=64 end=66>${array4.E2MTXHM002.MSGFN}</@field>
+		    <@field name="TDOBJECT" start=67 end=76>${array4.E2MTXHM002.TDOBJECT}</@field>
+		    <@field name="TDNAME" start=77 end=146>${array4.E2MTXHM002.TDNAME}</@field>
+		    <@field name="TDID" start=147 end=150>${array4.E2MTXHM002.TDID}</@field>
+		    <@field name="TDSPRAS" start=151 end=151>${array4.E2MTXHM002.TDSPRAS}</@field>
+		    <@field name="TDTEXTTYPE" start=152 end=157>${array4.E2MTXHM002.TDTEXTTYPE}</@field>
+		    <@field name="SPRAS_ISO" start=158 end=159>${array4.E2MTXHM002.SPRAS_ISO}</@field>
+		  </@segment>  
+		  <#list array4.E2MTXLM as mtxlm>
+		   <@segment name="E2MTXLM" length=200>
+		    <@field name="MSGFN" start=64 end=66>${mtxlm.MSGFN}</@field>
+		    <@field name="TDFORMAT" start=67 end=68>${mtxlm.TDFORMAT}</@field>
+		    <@field name="TDLINE" start=69 end=200>${mtxlm.TDLINE}</@field>
+		   </@segment>  
+		  </#list>
+		</#list>
+	</#if>		
+</#list>
+</@idoc>
+

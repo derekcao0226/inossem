@@ -1,0 +1,64 @@
+<#assign aDateTime = .now>
+<#assign aDate = aDateTime?date?string('yyyyMMdd')>
+<@idoc newline="LF">
+<@segment name="EDI_DC40_U" length=524>
+		<@field name="IDOCTYP" start=40 end=69>INFREC01</@field>
+    <@field name="MESTYP" start=100 end=129>INFREC</@field>
+    <@field name="SNDPOR" start=149 end=158>PGOCN</@field>
+    <@field name="SNDPRT" start=159 end=160>LS</@field>
+    <@field name="SNDPRN" start=163 end=172>PGOCN</@field>
+    <@field name="RCVPOR" start=264 end=273>SAPE4D</@field>
+    <@field name="RCVPRT" start=274 end=275>LS</@field>
+    <@field name="RCVPRN" start=278 end=287>E4DCLNT200</@field>
+    <@field name="REFMES" start=421 end=434>${Generate12BitsRandomNumber()}</@field>
+</@segment>
+
+ <@segment name="E2EINAM005" length=738>
+     <@field name="MSGFN" start=64 end=66>005</@field>     
+     <@field name="MATNR" start=77 end=94>${array1.E2MARAM008.MATNR}</@field>               
+     <@field name="LIFNR" start=104 end=113>C107</@field>     
+     <@field name="ERDAT" start=115 end=122>${aDate})</@field>
+     <#list group1 as array1>
+     <#if array1.E2MARAM008.MEINS?trim=='PCS'>
+     	 <@field name="MEINS" start=185 end=187>PCE</@field>
+     <#else>
+        <@field name="MEINS" start=185 end=187>${array1.E2MARAM008.MEINS?trim}</@field>
+     </#if>
+     </#list>
+     <@field name="UMREZ" start=188 end=195>1</@field>
+     <@field name="UMREN" start=196 end=203>1</@field>
+     <@field name="URZLA" start=305 end=307>CN</@field>
+     <#if array1.E2MARAM008.MEINS?trim=='PCS'>
+     	<@field name="LMEIN" start=325 end=327>PCE</@field>
+     <#else>
+      <@field name="LMEIN" start=325 end=327>${array1.E2MARAM008.MEINS?trim}</@field>
+     </#if>     
+     <@field name="REGIO" start=328 end=330>100</@field>     
+ </@segment>
+    
+ <#list group1 as  array1>  
+    <@segment name="E2EINEM006" length=521>
+       <@field name="MSGFN" start=64 end=66>005</@field>      
+       	<@field name="EKORG" start=67 end=70>P001</@field>      
+       <@field name="ESOKZ" start=71 end=71>0</@field>       
+       <@field name="ERDAT" start=77 end=84>${aDate}</@field>          
+       <#if array1.E2MARAM008.MATKL?trim='G01' || array1.E2MARAM008.MATKL?trim='G04'||array1.E2MARAM008.MATKL?trim='G03'>
+       	<@field name="EKGRP" start=97 end=99>SA1</@field>       
+       <#elseif array1.E2MARAM008.MATKL?trim!="G01"&&array1.E2MARAM008.MATKL?trim!="G03"&&array1.E2MARAM008.MATKL?trim!="G04">        
+       	<@field name="EKGRP" start=97 end=99>AS1</@field>
+       </#if>       
+       <@field name="NORBM" start=122 end=136>1</@field>
+       <@field name="APLFZ" start=137 end=141>90</@field>
+       <@field name="UEBTK" start=147 end=147>X</@field>      
+       <#if array1.E2MARAM008.MEINS?trim='PCS'>
+        <@field name="BPRME" start=193 end=195>PCE</@field>
+       <#else>
+         <@field name="BPRME" start=193 end=195>${array1.E2MARAM008.MEINS?trim}</@field>
+       </#if>
+       <@field name="PRDAT" start=196 end=203>${aDate}</@field>          
+       <@field name="BSTAE" start=262 end=265>Z001</@field>
+       <@field name="MEPRF" start=266 end=266>1</@field>          
+    </@segment> 
+ </#list>
+
+</@idoc>
