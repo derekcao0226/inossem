@@ -1,0 +1,15 @@
+{
+  "functionName": "ZMM_FM_001",
+  "importParameters": {
+    <#list group1 as array1> 
+    "IV_MATNR": "${array1.E2MARAM008.MATNR}",
+    <#list array1.E2MVKEM003 as e1mvkem>
+    <#if e1mvkem.VKORG="4317">
+    "IV_WERKS": "NL12"
+    <#elseif e1mvkem.VKORG="4350">
+    "IV_WERKS": "NL11"
+    </#if>
+    </#list>
+    </#list>
+  }
+}
